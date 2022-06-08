@@ -1,0 +1,71 @@
+addons/
+obj/
+.vs/
+*.exe
+*.exp
+*.ilk
+*.lib
+*.pdb
+*.dll
+*.opendb
+*.opensdf
+*.cachefile
+*.aps
+*.ncb
+*.sln
+*.rc
+*.db
+
+
+
+# ignore generated binaries
+# but not the data folder
+###########################
+
+*/bin/*
+!*/bin/data/
+
+#########
+# general
+#########
+
+*/[Bb]uild/
+*/[Oo]bj/
+*.o
+*/[Dd]ebug*/
+*/[Rr]elease*/
+*.mode*
+*.app/
+*.pyc
+.svn/
+*.log
+
+########################
+# IDE files which should
+# be ignored
+########################
+
+
+# Code::Blocks
+*.depend
+*.layout
+
+# Visual Studio
+*.sdf
+*.opensdf
+*.suo
+*.pdb
+*.ilk
+*.aps
+ipch/
+
+##################
+# operating system
+##################
+
+
+# Windows
+# Image file caches
+Thumbs.db
+# Folder config file
+Desktop.ini
