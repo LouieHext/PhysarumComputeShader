@@ -67,6 +67,9 @@ void ofApp::setupShaders() {
 	particles.resize(1024*16*1024); //try and keep power of 2
 	for (auto & particle : particles) {
 		particle.pos = glm::vec3(ofGetWidth()*(0.5+(-0.2+ofRandom(0,0.4))), ofGetHeight()*(0.5 + (-0.2 + ofRandom(0, 0.4))),0);
+		while (ofDist(particle.pos.x, particle.pos.y, ofGetWidth()*0.5, ofGetHeight()*0.5) > 0.2*ofGetWidth()) {
+			particle.pos = glm::vec3(ofGetWidth()*(0.5 + (-0.2 + ofRandom(0, 0.4))), ofGetHeight()*(0.5 + (-0.2 + ofRandom(0, 0.4))), 0);
+		}
 		particle.heading = ofRandom(0, 2 * PI);
 	}
 	//initialising pheremone array with zero values
@@ -114,6 +117,7 @@ void ofApp::setupParams() {
 	pheromoneSettings.setName("Pheromone params");
 	pheromoneSettings.add(decayWeight.set("decayWeight", 0.5, 0, 1));		  //value at which all pheromones decay
 	pheromoneSettings.add(diffusionWeight.set("diffusionWeight", 0.1, 0, 1)); //value at which all pheromones diffuse
+	pheromoneSettings.add(colouring.set("colouring", 0, 0, 1));
 	//adding to GUI
 	gui.add(agentSettings);
 	gui.add(pheromoneSettings);

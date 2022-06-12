@@ -15,10 +15,13 @@ layout(local_size_x= 20, local_size_y= 20, local_size_z = 1) in;    //reciving s
 //diffusion uniforms
 uniform float decayWeight;
 uniform float diffusionWeight;
+uniform int colouring;
 
 //width and height uniforms
 uniform int W;
 uniform int H;
+
+
 
 //diffusion kernel
 float weights[9] = float[](
@@ -51,7 +54,19 @@ void main(){
 	pheremonesBack[idx]*=(1.0-decayWeight); //decay
 
 	//setting current colour based on pheremone intensity
-	vec4 col = vec4(vec3(pheremonesBack[idx],pheremonesBack[idx]*0.5,pheremonesBack[idx]*0.1),1.0);
+	vec4 col;
+
+	if (colouring>0){
+		col = vec4(0.8*vec3(pheremonesBack[idx],pheremonesBack[idx]*0.5,pheremonesBack[idx]*0.1),1.0);
+
+		if (pheremonesBack[idx]<0.5){
+			col = vec4(1.5*vec3(pheremonesBack[idx]*0.1,pheremonesBack[idx]*0.5,pheremonesBack[idx]),1.0);
+		}
+	}
+	else {
+		col = vec4(vec3(pheremonesBack[idx]),1.0);
+	}
+
     imageStore(pheremoneDisplay,ivec2(gl_GlobalInvocationID.xy),col); //storing in texture
 
 }
