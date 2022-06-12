@@ -66,7 +66,7 @@ void ofApp::setupShaders() {
 	//initialising particle vector with particles
 	particles.resize(1024*16*1024); //try and keep power of 2
 	for (auto & particle : particles) {
-		particle.pos = glm::vec3(ofGetWidth()*0.5, ofGetHeight()*0.5,0);
+		particle.pos = glm::vec3(ofGetWidth()*(0.5+(-0.2+ofRandom(0,0.4))), ofGetHeight()*(0.5 + (-0.2 + ofRandom(0, 0.4))),0);
 		particle.heading = ofRandom(0, 2 * PI);
 	}
 	//initialising pheremone array with zero values
@@ -107,6 +107,9 @@ void ofApp::setupParams() {
 	agentSettings.add(sensorAngle.set("sensorAngle", 0.3, 0, 3.141));   //angle at which particles checks phermones
 	agentSettings.add(sensorDistance.set("sensorDistance", 10, 1, 25)); //distance at when particle checks phermones
 	agentSettings.add(sensorSize.set("sensorSize", 1, 0, 5));			//kernel size of pheremone check
+	agentSettings.add(densitySpeed.set("densitySpeed", 0,0,1));
+	agentSettings.add(baseMulti.set("baseMulti", 0.05, 0.001, 0.1));
+	agentSettings.add(densityMulti.set("densityMulti", 0.01, 0.0001, 0.05));
 	//setting up pheromone params
 	pheromoneSettings.setName("Pheromone params");
 	pheromoneSettings.add(decayWeight.set("decayWeight", 0.5, 0, 1));		  //value at which all pheromones decay

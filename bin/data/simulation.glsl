@@ -29,10 +29,15 @@ uniform float turningSpeed;
 uniform float sensorAngle;
 uniform int sensorDistance;
 uniform int sensorSize;
+uniform int densitySpeed;
+uniform float baseMulti;
+uniform float densityMulti;
 //width and height uniforms
 uniform int W;
 uniform int H;
 uniform int numParticles;
+
+;
 
 //Simulation Functions
 //--------------------------------------------------------------
@@ -87,7 +92,24 @@ float updateHeading(Agent agent) {
   //standard position update function
   //moves at a step size of speed in direction of agent heading
 vec2 updatePos(Agent agent) {
-	return vec2(agent.pos.x,agent.pos.y) + maxSpeed*vec2(cos(agent.heading),sin(agent.heading));
+	
+	
+	float speed = maxSpeed;
+
+	if (densitySpeed>0){
+		float value = 0;
+		int i = int(agent.pos.x);
+		int j = int(agent.pos.y);
+		for(int ii=-6;ii<=6;ii++){
+			for(int jj=-6;jj<=6;jj++){
+				value+=pheremones[i + ii + ( j + jj ) * W];
+			}
+		}
+		speed = maxSpeed*baseMulti + min(value*value*densityMulti*0.01,maxSpeed);
+	}
+	
+	return vec2(agent.pos.x,agent.pos.y) + speed*vec2(cos(agent.heading),sin(agent.heading));
+
   }
 
   //applies periodic boundary conditions
@@ -103,14 +125,21 @@ void main(){
 		return ;
 	}
 	else{
+
+	
 	Agent agent = p[gl_GlobalInvocationID.x];
+
+	
 	
 	agent.heading=updateHeading(agent);						//updating heading
     vec2 tempPos=updatePos(agent);							//getting new position
     agent.pos=vec3(boundaryCheck(tempPos),0.0);				//applying BC on new position
 
 	p[gl_GlobalInvocationID.x] =  agent;					//updating agent buffer
-	pheremones[int(agent.pos.x) + int(agent.pos.y) * W]+=1; //dropping phermones
-	}
 
+
+	pheremones[int(agent.pos.x) + int(agent.pos.y) * W]+=1; //dropping phermones
+	
+
+}
 }

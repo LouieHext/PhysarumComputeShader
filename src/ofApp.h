@@ -54,6 +54,8 @@ class ofApp : public ofBaseApp{
 		ofParameter<int> sensorDistance, sensorSize;
 		ofParameter<int> numAgents;
 		ofParameter<float> decayWeight, diffusionWeight;
+		ofParameter<int> densitySpeed;
+		ofParameter<float> baseMulti, densityMulti;
 
 		ofParameterGroup agentSettings, pheromoneSettings;
 

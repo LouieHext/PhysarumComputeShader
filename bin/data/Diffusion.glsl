@@ -38,8 +38,8 @@ void main(){
 
 	float value=0;
 	int c=0;
-	for(int ii=-1;ii<2;ii++){
-		for(int jj=-1;jj<2;jj++){
+	for(int ii=-1;ii<=1;ii++){
+		for(int jj=-1;jj<=1;jj++){
 			value+=pheremones[i + ii + ( j + jj ) * W]*weights[c];
 			c++;
 		}
@@ -51,7 +51,7 @@ void main(){
 	pheremonesBack[idx]*=(1.0-decayWeight); //decay
 
 	//setting current colour based on pheremone intensity
-	vec4 col = vec4(vec3(pheremonesBack[idx]),1.0);
+	vec4 col = vec4(vec3(pheremonesBack[idx],pheremonesBack[idx]*0.5,pheremonesBack[idx]*0.1),1.0);
     imageStore(pheremoneDisplay,ivec2(gl_GlobalInvocationID.xy),col); //storing in texture
 
 }
