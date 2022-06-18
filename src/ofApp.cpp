@@ -64,9 +64,17 @@ void ofApp::setupShaders() {
 	diffusion.linkProgram();
 
 	//initialising particle vector with particles
-	particles.resize(1024*16*1024); //try and keep power of 2
+	particles.resize(1024*4*1024); //try and keep power of 2
 	for (auto & particle : particles) {
 		particle.pos = glm::vec3(ofGetWidth()*(0.5+(-0.2+ofRandom(0,0.4))), ofGetHeight()*(0.5 + (-0.2 + ofRandom(0, 0.4))),0);
+		while (ofDist(particle.pos.x, particle.pos.y, ofGetWidth()*0.5, ofGetHeight()*0.5) > 0.2*ofGetWidth()) {
+			particle.pos = glm::vec3(ofGetWidth()*(0.5 + (-0.2 + ofRandom(0, 0.4))), ofGetHeight()*(0.5 + (-0.2 + ofRandom(0, 0.4))), 0);
+		}
+		particle.heading = ofRandom(0, 2 * PI);
+	}
+	particles2.resize(1024 * 8 * 1024); //try and keep power of 2
+	for (auto & particle : particles2) {
+		particle.pos = glm::vec3(ofGetWidth()*(0.5 + (-0.2 + ofRandom(0, 0.4))), ofGetHeight()*(0.5 + (-0.2 + ofRandom(0, 0.4))), 0);
 		while (ofDist(particle.pos.x, particle.pos.y, ofGetWidth()*0.5, ofGetHeight()*0.5) > 0.2*ofGetWidth()) {
 			particle.pos = glm::vec3(ofGetWidth()*(0.5 + (-0.2 + ofRandom(0, 0.4))), ofGetHeight()*(0.5 + (-0.2 + ofRandom(0, 0.4))), 0);
 		}
@@ -77,6 +85,7 @@ void ofApp::setupShaders() {
 		for (int y = 0; y < H; y++) {
 			int idx = x + y * W; //2D->1D
 			pheremonesCPU[idx] = 0.0;
+			pheremonesCPU2[idx] = 0.0;
 		}
 	}
 
@@ -88,11 +97,20 @@ void ofApp::setupShaders() {
 	particlesBuffer.allocate(particles, GL_DYNAMIC_DRAW);				//storing particle info
 	particlesBufferClear.allocate(particles, GL_STATIC_DRAW);			//for restarting
 
+	pheremones2.allocate(arraySize, pheremonesCPU2, GL_STATIC_DRAW);	//storing pheremone intensities
+	pheremonesBack2.allocate(arraySize, pheremonesCPU2, GL_STATIC_DRAW);  //to allow for diffusion
+	pheremonesClear2.allocate(arraySize, pheremonesCPU2, GL_STATIC_DRAW); //for resetting 
+	particlesBuffer2.allocate(particles2, GL_DYNAMIC_DRAW);				//storing particle info
+	particlesBufferClear2.allocate(particles2, GL_STATIC_DRAW);			//for restarting
+
 	//binding buffers so GPU knows whats what
 	//note we dont bind the "Clear" buffers as they are not referenced in the shader code
 	particlesBuffer.bindBase(GL_SHADER_STORAGE_BUFFER, 0);
 	pheremones.bindBase(GL_SHADER_STORAGE_BUFFER, 1);
 	pheremonesBack.bindBase(GL_SHADER_STORAGE_BUFFER, 2);
+	particlesBuffer2.bindBase(GL_SHADER_STORAGE_BUFFER, 4);
+	pheremones2.bindBase(GL_SHADER_STORAGE_BUFFER, 5);
+	pheremonesBack2.bindBase(GL_SHADER_STORAGE_BUFFER, 6);
 
 	//allocating and binding display texture which we use to visualise GPU results
 	pheromoneIntensityTexture.allocate(W, H, GL_RGBA8);
@@ -111,6 +129,7 @@ void ofApp::setupParams() {
 	agentSettings.add(sensorDistance.set("sensorDistance", 10, 1, 25)); //distance at when particle checks phermones
 	agentSettings.add(sensorSize.set("sensorSize", 1, 0, 5));			//kernel size of pheremone check
 	agentSettings.add(densitySpeed.set("densitySpeed", 0,0,1));
+	agentSettings.add(multiSpecies.set("multiSpecies", 0, 0, 1));
 	agentSettings.add(baseMulti.set("baseMulti", 0.05, 0.001, 0.1));
 	agentSettings.add(densityMulti.set("densityMulti", 0.01, 0.0001, 0.05));
 	//setting up pheromone params
@@ -145,15 +164,19 @@ void ofApp::updatePheromones() {
 	diffusion.begin();
 	//passing uniforms
 	diffusion.setUniforms(pheromoneSettings);
+	diffusion.setUniform1i("multiSpecies",multiSpecies);
 	diffusion.setUniform1i("W", W);
 	diffusion.setUniform1i("H", H);
+	
 	//dispatching
 	diffusion.dispatchCompute(W / 20, H / 20, 1); //splitting diffusion into work groups of size 20*20
+
 	//ending shader
 	diffusion.end();
 	//diffusion shader sets diffused values to pheremoneBack buffer
 	//copying those to main pheremone buffer for next frame
 	pheremonesBack.copyTo(pheremones);
+	pheremonesBack2.copyTo(pheremones2);
 }
 
 //Helper Functions
@@ -179,6 +202,9 @@ void ofApp::keyPressed(int key){
 		particlesBufferClear.copyTo(particlesBuffer);
 		pheremonesClear.copyTo(pheremones);
 		pheremonesClear.copyTo(pheremonesBack);
+		particlesBufferClear2.copyTo(particlesBuffer2);
+		pheremonesClear2.copyTo(pheremones2);
+		pheremonesClear2.copyTo(pheremonesBack2);
 	}
 	//changing saving conditional
 	if (key == 's') {

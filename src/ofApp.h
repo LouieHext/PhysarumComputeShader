@@ -38,14 +38,15 @@ class ofApp : public ofBaseApp{
 		};
 
 		//container for particles
-		vector<Particle> particles;
+		vector<Particle> particles, particles2;
 
 		//buffer objects and textures
-		ofBufferObject particlesBuffer, particlesBufferClear, pheremones, pheremonesBack,pheremonesClear;
+		ofBufferObject particlesBuffer, particlesBuffer2, particlesBufferClear, particlesBufferClear2;
+		ofBufferObject	pheremones, pheremones2, pheremonesBack,pheremonesBack2,pheremonesClear, pheremonesClear2;
 		ofTexture pheromoneIntensityTexture;
 
 		//CPU side array for buffer decloration
-		float pheremonesCPU[W*H];
+		float pheremonesCPU[W*H], pheremonesCPU2[W*H];
 
 		//GUI and params
 		ofxPanel gui;
@@ -54,7 +55,7 @@ class ofApp : public ofBaseApp{
 		ofParameter<int> sensorDistance, sensorSize;
 		ofParameter<int> numAgents;
 		ofParameter<float> decayWeight, diffusionWeight;
-		ofParameter<int> densitySpeed,colouring;
+		ofParameter<int> densitySpeed,colouring,multiSpecies;
 		ofParameter<float> baseMulti, densityMulti;
 
 		ofParameterGroup agentSettings, pheromoneSettings;
