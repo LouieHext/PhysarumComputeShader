@@ -56,7 +56,7 @@ vec4 getColour(int idx){
 	if (multiSpecies>0){
 		col  = vec4(0.8*vec3(pheremonesBack[idx],pheremonesBack[idx]*0.1,pheremonesBack[idx]*0.1),0.5);
 		col2 = vec4(0.1*vec3(pheremonesBack2[idx],pheremonesBack2[idx]*0.1,pheremonesBack2[idx]*0.8),0.5);
-		col = col+col2;
+		col = col+col2*2;
 	}
 	return col;
 }

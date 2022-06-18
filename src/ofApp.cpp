@@ -72,7 +72,7 @@ void ofApp::setupShaders() {
 		}
 		particle.heading = ofRandom(0, 2 * PI);
 	}
-	particles2.resize(1024 * 8 * 1024); //try and keep power of 2
+	particles2.resize(1024 * 4 * 1024); //try and keep power of 2
 	for (auto & particle : particles2) {
 		particle.pos = glm::vec3(ofGetWidth()*(0.5 + (-0.2 + ofRandom(0, 0.4))), ofGetHeight()*(0.5 + (-0.2 + ofRandom(0, 0.4))), 0);
 		while (ofDist(particle.pos.x, particle.pos.y, ofGetWidth()*0.5, ofGetHeight()*0.5) > 0.2*ofGetWidth()) {
