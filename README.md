@@ -14,9 +14,8 @@ run.
 
 # DEMO - https://vimeo.com/718503481
 ![alt text](./images/1.png?raw=true)
-![alt text](./images/19.png?raw=true)
+![alt text](./images/5.png?raw=true)
 ![alt text](./images/3.png?raw=true)
 ![alt text](./images/20.png?raw=true)
-![alt text](./images/5.png?raw=true)
 
 
