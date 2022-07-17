@@ -41,10 +41,10 @@ vec4 getColour(int idx){
 	vec4 col2;
 
 	if (colouring>0){
-		col = vec4(0.8*vec3(pheremonesBack[idx],pheremonesBack[idx]*0.5,pheremonesBack[idx]*0.1),1.0);
+		col = vec4(0.8*vec3(pheremonesBack[idx],pheremonesBack[idx]*0.2,pheremonesBack[idx]*0.1),1.0);
 
 		if (pheremonesBack[idx]<0.5){
-			col = vec4(1.5*vec3(pheremonesBack[idx]*0.1,pheremonesBack[idx]*0.5,pheremonesBack[idx]),1.0);
+			col = vec4(1.5*vec3(pheremonesBack[idx]*0.1,pheremonesBack[idx]*0.5,pheremonesBack[idx]*0.5),1.0);
 		}
 	}
 	else {
@@ -54,9 +54,9 @@ vec4 getColour(int idx){
 
 
 	if (multiSpecies>0){
-		col  = vec4(0.8*vec3(pheremonesBack[idx],pheremonesBack[idx]*0.1,pheremonesBack[idx]*0.1),0.5);
-		col2 = vec4(0.1*vec3(pheremonesBack2[idx],pheremonesBack2[idx]*0.1,pheremonesBack2[idx]*0.8),0.5);
-		col = col+col2*2;
+		col  = vec4(0.8*vec3(pheremonesBack[idx]*0.1,pheremonesBack[idx]*0.9,pheremonesBack[idx]*0.3),0.5);
+		col2 = vec4(0.1*vec3(pheremonesBack2[idx]*0.1,pheremonesBack2[idx]*0.3,pheremonesBack2[idx]*0.9),0.6);
+		col = col+col2*3.0;
 	}
 	return col;
 }

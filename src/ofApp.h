@@ -4,7 +4,7 @@
 #include "ofxGui.h"
 
 //globals for simulation and image size
-#define W 1080 
+#define W 1920
 #define H 1080
 
 class ofApp : public ofBaseApp{

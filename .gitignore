@@ -12,7 +12,6 @@ obj/
 *.cachefile
 *.aps
 *.ncb
-*.sln
 *.rc
 *.db
 

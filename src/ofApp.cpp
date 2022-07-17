@@ -49,7 +49,7 @@ void ofApp::draw(){
 	showFPS();  //performance
 	pheromoneIntensityTexture.draw(0, 0);  //drawing our texture buffer
 	gui.draw(); //drawing GUI
-	if (saving && ofGetFrameNum()%20==0) { 
+	if (saving && ofGetFrameNum()%1==0) { 
 		saveFrame(); //saving images
 	}
 }
@@ -64,18 +64,18 @@ void ofApp::setupShaders() {
 	diffusion.linkProgram();
 
 	//initialising particle vector with particles
-	particles.resize(1024*4*1024); //try and keep power of 2
+	particles.resize(1024*8*1024); //try and keep power of 2
 	for (auto & particle : particles) {
 		particle.pos = glm::vec3(ofGetWidth()*(0.5+(-0.2+ofRandom(0,0.4))), ofGetHeight()*(0.5 + (-0.2 + ofRandom(0, 0.4))),0);
-		while (ofDist(particle.pos.x, particle.pos.y, ofGetWidth()*0.5, ofGetHeight()*0.5) > 0.2*ofGetWidth()) {
+		while (ofDist(particle.pos.x, particle.pos.y, ofGetWidth()*0.5, ofGetHeight()*0.5) > 0.2*ofGetHeight()) {
 			particle.pos = glm::vec3(ofGetWidth()*(0.5 + (-0.2 + ofRandom(0, 0.4))), ofGetHeight()*(0.5 + (-0.2 + ofRandom(0, 0.4))), 0);
 		}
 		particle.heading = ofRandom(0, 2 * PI);
 	}
-	particles2.resize(1024 * 4 * 1024); //try and keep power of 2
+	particles2.resize(1024 * 8 * 1024); //try and keep power of 2
 	for (auto & particle : particles2) {
 		particle.pos = glm::vec3(ofGetWidth()*(0.5 + (-0.2 + ofRandom(0, 0.4))), ofGetHeight()*(0.5 + (-0.2 + ofRandom(0, 0.4))), 0);
-		while (ofDist(particle.pos.x, particle.pos.y, ofGetWidth()*0.5, ofGetHeight()*0.5) > 0.2*ofGetWidth()) {
+		while (ofDist(particle.pos.x, particle.pos.y, ofGetWidth()*0.5, ofGetHeight()*0.5) > 0.2*ofGetHeight()) {
 			particle.pos = glm::vec3(ofGetWidth()*(0.5 + (-0.2 + ofRandom(0, 0.4))), ofGetHeight()*(0.5 + (-0.2 + ofRandom(0, 0.4))), 0);
 		}
 		particle.heading = ofRandom(0, 2 * PI);
